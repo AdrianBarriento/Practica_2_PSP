@@ -31,7 +31,7 @@ public class GestionBd {
         PreparedStatement query =null;
         ResultSet datos = null;
         try {
-            query = conexion.prepareStatement("SELECT INGRESOS FROM empleados WHERE ID>"+inicio+"AND ID<"+fin);
+            query = conexion.prepareStatement("SELECT INGRESOS FROM empleados WHERE ID>="+inicio+"AND ID<="+fin);
             datos = query.executeQuery();
         } catch (SQLException e) {
             System.out.println("No es posible acceder a los datos");

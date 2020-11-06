@@ -25,7 +25,6 @@ public class SumaSecuencial {
             ingresosTotal+=recorrerLoop;
         }
         long tiempoFinal = System.currentTimeMillis();
-
         System.out.println("La suma total de ingresos es de: "+ingresosTotal+", y se ha realizado en "+(tiempoFinal-tiempoInicio)+" milisegundos");
     }
 }

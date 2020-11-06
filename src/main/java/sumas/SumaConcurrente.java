@@ -2,29 +2,39 @@ package sumas;
 
 import gestionbbdd.GestionBd;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class SumaConcurrente {
-    private GestionBd bbdd;
-    public int ingresosTotal=0;
-    public synchronized int sumaConcurrente(int inicio, int fin){
-        ResultSet datos = null;
-        ArrayList<Integer> ingresos = new ArrayList();
+    public void sumaConcurrente(){
+        int totalRegistros=getRegistros(), porcionXHilo = totalRegistros/5;
+        //sacar los registros que hay que sumar al ultimo hilo si no es divisible
+        int diferenciaPorcion = totalRegistros-(porcionXHilo*5);
+
+
+
+
+
+
+
+    }
+
+
+    private int getRegistros(){
+        int numRegistros =0;
+        GestionBd bbdd = new GestionBd();
+        Connection conexion = bbdd.getConexion();
+        ResultSet sacarRegistros = bbdd.getQuery(conexion);
+        //sacar el numero total de columnas que hay en la base de datos
         try{
-            datos = bbdd.getQuery(bbdd.getConexion(), inicio, fin);
-            while(datos.next()){
-                int ingreso= datos.getInt("INGRESOS");
-                ingresos.add(ingreso);
+            while(sacarRegistros.next()){
+                numRegistros+=1;
             }
         } catch (SQLException throwables) {
-            System.out.println("No es posible acceder a los datos");
+            throwables.printStackTrace();
         }
-        for (int recorrerLoop:ingresos) {
-            ingresosTotal+=recorrerLoop;
-        }
-        return ingresosTotal;
+        return numRegistros;
     }
 
 
