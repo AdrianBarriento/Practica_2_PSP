@@ -2,6 +2,7 @@ package gestionbbdd;
 
 import java.sql.*;
 
+//clase para gestionar los accesos a la base de datos
 public class GestionBd {
     public Connection getConexion(){
         Connection conexion=null;
@@ -17,7 +18,7 @@ public class GestionBd {
     }
 
     public ResultSet getQuery(Connection conexion){
-        PreparedStatement query =null;
+        PreparedStatement query;
         ResultSet datos = null;
         try {
             query = conexion.prepareStatement("SELECT INGRESOS FROM empleados");
@@ -27,11 +28,13 @@ public class GestionBd {
         }
         return datos;
     }
+
+    //metodo para hacer la query pero dentro de un rango de IDs, para usarlo en hilos
     public ResultSet getQuery(Connection conexion, int inicio, int fin){
-        PreparedStatement query =null;
+        PreparedStatement query;
         ResultSet datos = null;
         try {
-            query = conexion.prepareStatement("SELECT INGRESOS FROM empleados WHERE ID>="+inicio+"AND ID<="+fin);
+            query = conexion.prepareStatement("SELECT INGRESOS FROM empleados WHERE ID BETWEEN "+inicio+" AND "+fin);
             datos = query.executeQuery();
         } catch (SQLException e) {
             System.out.println("No es posible acceder a los datos");

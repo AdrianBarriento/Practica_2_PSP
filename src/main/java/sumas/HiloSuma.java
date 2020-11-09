@@ -6,20 +6,24 @@ import lombok.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-@Data @AllArgsConstructor
+@Data
 public class HiloSuma extends Thread {
 
     private int primerRegistro;
     private int ultimoRegistro;
-    private int ingresosTotal;
+    //cada hilo guardará una parte de los ingresos totales y se sumarán todos luego para sacar los ingresos totales
+    private int ingresosParcial;
 
+    //constructor con el inicio y el final del rango de IDs que tiene que abarcar el hilo
+    public HiloSuma(int primerRegistro, int ultimoRegistro){
+        this.primerRegistro=primerRegistro;
+        this.ultimoRegistro=ultimoRegistro;
+    }
 
-    private synchronized int sumaConcurrente(int inicio, int fin){
-        GestionBd bbdd = new GestionBd();
-        ResultSet datos;
+    private int sumaConcurrente(){
         ArrayList<Integer> ingresos = new ArrayList();
         try{
-            datos = bbdd.getQuery(bbdd.getConexion(), inicio, fin);
+            ResultSet datos = new GestionBd().getQuery(new GestionBd().getConexion(), primerRegistro, ultimoRegistro);
             while(datos.next()){
                 int ingreso= datos.getInt("INGRESOS");
                 ingresos.add(ingreso);
@@ -28,13 +32,11 @@ public class HiloSuma extends Thread {
             System.out.println("No es posible acceder a los datos");
         }
         for (int recorrerLoop:ingresos) {
-            ingresosTotal+=recorrerLoop;
+            ingresosParcial+=recorrerLoop;
         }
-        return ingresosTotal;
+        return ingresosParcial;
     }
 
     @Override
-    public void run() {
-        ingresosTotal+=sumaConcurrente(primerRegistro, ultimoRegistro);
-    }
+    public void run() {ingresosParcial=sumaConcurrente();}
 }

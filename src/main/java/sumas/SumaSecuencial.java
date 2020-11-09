@@ -6,13 +6,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SumaSecuencial {
-    private GestionBd bbdd;
+
     public void sumaSecuencial(){
         long tiempoInicio= System.currentTimeMillis();
-        ResultSet datos = null;
+        ResultSet datos ;
         ArrayList<Integer> ingresos = new ArrayList();
+
         try{
-            datos = bbdd.getQuery(bbdd.getConexion());
+            datos = new GestionBd().getQuery(new GestionBd().getConexion());
             while(datos.next()){
                 int ingreso= datos.getInt("INGRESOS");
                 ingresos.add(ingreso);
@@ -25,6 +26,6 @@ public class SumaSecuencial {
             ingresosTotal+=recorrerLoop;
         }
         long tiempoFinal = System.currentTimeMillis();
-        System.out.println("La suma total de ingresos es de: "+ingresosTotal+", y se ha realizado en "+(tiempoFinal-tiempoInicio)+" milisegundos");
+        System.out.println("Ingresos totales-(SECUENCIAL): "+ingresosTotal+"\nSacado en "+(tiempoFinal-tiempoInicio)+" milisegundos");
     }
 }
