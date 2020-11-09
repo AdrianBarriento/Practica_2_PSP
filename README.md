@@ -16,5 +16,4 @@
  #### HERRAMIENTAS UTILIZADAS
   - IntelliJ IDEA
   - Proyecto Maven
-  - Librería FAKER
   - MySQL
